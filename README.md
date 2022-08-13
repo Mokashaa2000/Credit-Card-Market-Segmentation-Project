@@ -280,3 +280,21 @@ pd.set_option("display.max_rows",100)
   </tbody>
 </table>
 </div>
+
+- The average balance is 1560
+- The average balance frequency is high which means that we have a high purchase customers
+- the average purchases is 1000$ and there's a lot of diversity in it
+- the one time purchases average more than the installment average
+- more than 75% of the customers don't have advance cash
+- the credit limit average is near 4500 $
+- more than 75% of tenure is 12
+- minimum payments is 850 $
+
+
+### Balance 
+
+![png](Figures/code_18_2.png)
+    
+
+
+- the customers balances are between 0 and 3000
