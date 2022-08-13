@@ -5,8 +5,7 @@
 
 credit cards company just hired a data scientist to help them construct customers segments in order to customize, personalize ads and offers and understand their customers better. 
 
-
-And in this repository i'll help solving this case study.
+And in this repository i'll help solving this case study by building Hierarchical Clustering model.
 
 
 ### Dataset Information
