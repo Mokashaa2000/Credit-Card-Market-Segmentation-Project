@@ -293,7 +293,7 @@ pd.set_option("display.max_rows",100)
 
 ### Balance 
 
-![png](Figures/code_18_2.png)
+![png](Figures/code_18_2)
     
 
 
