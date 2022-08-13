@@ -293,7 +293,7 @@ pd.set_option("display.max_rows",100)
 
 ### Balance 
 
-![png](Credit-Card-Market-Segmentation-Project/Figures/code_18_2)
+![png](/Figures/code_18_2)
     
 
 
