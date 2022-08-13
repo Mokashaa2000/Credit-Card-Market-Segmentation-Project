@@ -293,8 +293,53 @@ pd.set_option("display.max_rows",100)
 
 ### Balance 
 
-![png](/Figures/code_18_2)
+![png](Figures/code_18_2.png)
     
 
 
 - the customers balances are between 0 and 3000
+
+
+### Balance Frequency and Balance Correlation
+
+![png](Figures/code_27_2.png)
+
+```python
+# Spearman correlation
+
+from scipy.stats import spearmanr,pearsonr
+
+spearmanr(df["balance"],df["balance_frequency"])
+
+```
+
+
+
+
+    SpearmanrResult(correlation=0.544980971507205, pvalue=0.0)
+
+- There's a strong correlation between balance frequency and balance.
+
+
+### Purchases
+
+![png](Figures/code_32_2.png)
+    
+
+
+- Most purchases is less than 10000 $ 
+
+
+### oneoff vs installment purchases
+
+
+```python
+plt.figure(figsize=(15,10))
+sns.distplot(df["oneoff_purchases"],label="oneoff")
+sns.distplot(df["installments_purchases"],label="installment")
+plt.title("Distribution of installment and oneoff purchases")
+plt.legend()
+```
+![png](Figures/code_41_2.png)
+
+- The installments purchases are more than oneoff purchases
