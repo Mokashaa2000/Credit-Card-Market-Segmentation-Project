@@ -343,3 +343,7 @@ plt.legend()
 ![png](Figures/code_41_2.png)
 
 - The installments purchases are more than oneoff purchases
+
+
+#### You can access all insghts in the notebook
+![All Insights and Code](https://github.com/Mokashaa2000/Credit-Card-Market-Segmentation-Project/blob/main/Code.ipynb)
