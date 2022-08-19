@@ -366,3 +366,270 @@ for k in range(1,10):
 plt.plot(range(1,10),w)    
 ```
 ![png](Figures/code_86_1.png)
+
+ I'll use 2 clusters since the data is biased and not includes all type of customers.
+ 
+ ### Hierarchical Clustering
+ To fit hierarchical clustering into the data I'll use Scipy library to scale and then fit the model into the data.
+ 
+ #### Scaling the data
+ I will rescale the data using whiten function from scipy
+```python
+# I will use whiten function from scipy for scaling
+from scipy.cluster.vq import whiten
+
+new_df[["balance","purchases","oneoff_purchases","installments_purchases","cash_advance","cash_advance_trx","purchases_trx","credit_limit","payments","minimum_payments"]] = whiten(new_df[["balance","purchases","oneoff_purchases","installments_purchases","cash_advance","cash_advance_trx","purchases_trx","credit_limit","payments","minimum_payments"]])
+```
+
+##### Taking a final look at the data will be fitted into the model 
+```python
+new_df.head()
+```
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>balance</th>
+      <th>balance_frequency</th>
+      <th>purchases</th>
+      <th>oneoff_purchases</th>
+      <th>installments_purchases</th>
+      <th>cash_advance</th>
+      <th>purchases_frequency</th>
+      <th>oneoff_purchases_frequency</th>
+      <th>purchases_installments_frequency</th>
+      <th>cash_advance_frequency</th>
+      <th>cash_advance_trx</th>
+      <th>purchases_trx</th>
+      <th>credit_limit</th>
+      <th>payments</th>
+      <th>minimum_payments</th>
+      <th>prc_full_payment</th>
+      <th>tenure</th>
+      <th>clusters</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.019518</td>
+      <td>0.82</td>
+      <td>0.044024</td>
+      <td>0.00000</td>
+      <td>0.104013</td>
+      <td>0.000000</td>
+      <td>0.17</td>
+      <td>0.00</td>
+      <td>0.08</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.079431</td>
+      <td>0.273297</td>
+      <td>0.069356</td>
+      <td>0.058805</td>
+      <td>0.00</td>
+      <td>12</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.528297</td>
+      <td>0.91</td>
+      <td>0.000000</td>
+      <td>0.00000</td>
+      <td>0.000000</td>
+      <td>3.037214</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.25</td>
+      <td>0.578695</td>
+      <td>0.000000</td>
+      <td>1.913076</td>
+      <td>1.410150</td>
+      <td>0.452001</td>
+      <td>0.22</td>
+      <td>12</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.190747</td>
+      <td>1.00</td>
+      <td>0.356796</td>
+      <td>0.45907</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>1.00</td>
+      <td>1.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.476587</td>
+      <td>2.049724</td>
+      <td>0.213796</td>
+      <td>0.264404</td>
+      <td>0.00</td>
+      <td>12</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.390231</td>
+      <td>1.00</td>
+      <td>0.007384</td>
+      <td>0.00950</td>
+      <td>0.000000</td>
+      <td>0.000000</td>
+      <td>0.08</td>
+      <td>0.08</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.039716</td>
+      <td>0.327956</td>
+      <td>0.233132</td>
+      <td>0.103181</td>
+      <td>0.00</td>
+      <td>12</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.863695</td>
+      <td>1.00</td>
+      <td>0.615270</td>
+      <td>0.00000</td>
+      <td>1.453654</td>
+      <td>0.000000</td>
+      <td>0.67</td>
+      <td>0.00</td>
+      <td>0.58</td>
+      <td>0.00</td>
+      <td>0.000000</td>
+      <td>0.317725</td>
+      <td>0.491934</td>
+      <td>0.481180</td>
+      <td>1.014677</td>
+      <td>0.00</td>
+      <td>12</td>
+      <td>3</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+### Model fitting
+The distance metric i used is euclidean and the method is complete which i found it the best after a couple of tries.
+```python
+from scipy.cluster.hierarchy import linkage,fcluster
+
+distance = linkage(new_df,metric = 'euclidean',method = "complete")
+clusters = fcluster(distance, 2, criterion='maxclust')
+
+```
+Assign the clusters to the dataset 
+```python
+# Assign clusters to the data.
+new_df["clusters"] = clusters
+
+```
+
+
+
+```python
+cluster_1 = new_df[new_df["clusters"] == 1]
+cluster_2 = new_df[new_df["clusters"] == 2]
+
+
+```
+
+## Clustering Visualization
+
+
+### Balance vs Purchases
+
+
+```python
+plt.figure(figsize=(15,15))
+
+sns.scatterplot(data=cluster_1,x="balance",y="purchases")
+sns.scatterplot(data=cluster_2,x="balance",y="purchases")
+```
+![png](Figures/code_97_1.png)
+
+ Cluster 2 customers have high purchases and low to mid balnce
+ 
+ ### Balance vs Payments
+
+
+```python
+plt.figure(figsize=(15,15))
+
+sns.scatterplot(data=cluster_1,x="balance",y="payments")
+sns.scatterplot(data=cluster_2,x="balance",y="payments")
+```
+
+
+![png](Figures/code_100_1.png)
+
+
+### Purchases vs payments
+
+
+```python
+plt.figure(figsize=(15,15))
+
+sns.scatterplot(data=cluster_1,x="purchases",y="payments")
+sns.scatterplot(data=cluster_2,x="purchases",y="payments")
+```
+![png](Figures/code_102_1.png)
+
+
+- The cluster 2 which is the low percentage of the customers tend to have high purchases, high balances, and high payments.
+
+### Clustering Evaluation
+I'll use silhoutte score which measure the distance between the nerby clusters and get the sum of the errors.
+
+
+```python
+from sklearn.metrics import silhouette_score
+
+score = silhouette_score(new_df.drop("clusters",axis=1),clusters)
+```
+
+
+```python
+print(f"Your Clustering model score is %{np.round(score*100,2)}")
+```
+
+    Your Clustering model score is %83.67
+    
+##### Good result with biased data.
+I won't deploy the model because the data is bad and it will not work as expected.
+
+## Findings Summary :
+
+
+- people with high payments have high balances
+- the tenure 12 customer has more balances
+- there's a positive relationship between credit_limit and balance
+- the more the credit limit the more balance frequency
+- there's no relation between cash advance and purchases
+- most purchases less than 10000 $
+- the installments purchases are more than oneoff purchases
+- the balance amount affects the purchases
