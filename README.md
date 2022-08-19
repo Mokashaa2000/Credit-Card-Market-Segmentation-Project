@@ -345,5 +345,24 @@ plt.legend()
 - The installments purchases are more than oneoff purchases
 
 
-#### You can access all insghts in the notebook
-![All Insights and Code](https://github.com/Mokashaa2000/Credit-Card-Market-Segmentation-Project/blob/main/Code.ipynb)
+#### You can access the code related to  all remaining insights in the notebook : 
+[All Insights and Code](https://github.com/Mokashaa2000/Credit-Card-Market-Segmentation-Project/blob/main/Code.ipynb)
+
+
+
+## Model Building
+Hierarchical clustering is the best fit for this type of problem since it can capture complicated patterns between the data.
+#### The optimum number of clusters
+The elbow-technique can determine the best number of clusters 
+```python
+# Using elbow technique.
+from sklearn.cluster import KMeans
+w = []
+plt.figure(figsize=(10,10))
+for k in range(1,10):
+    km = KMeans(n_clusters=k)
+    km.fit(new_df)
+    w.append(km.inertia_)
+plt.plot(range(1,10),w)    
+```
+![png](Figures/code_86_1.png)
